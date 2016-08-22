@@ -1,0 +1,25 @@
+<?php
+
+$dbuser = "";                // enter the user name to connect to the database
+$dbname = "";                // enter the database name you want to connect with
+$dbpass = "";               // enter the password
+$dbhost = "";   // enter the host information
+
+$projectID = ;             // enter project id here (found on Device Settings page)
+
+$source = "";   // Image source
+
+
+define("PROJID", $projectID);
+define("DBUSER",$dbuser);
+define("DBHOST",$dbhost);
+define("DBPASS", $dbpass);
+define("DBNAME", $dbname);
+
+$base = str_replace(
+    $_SERVER['DOCUMENT_ROOT'],
+    '',
+    realpath(dirname(__FILE__)));
+
+$base = ($base == '') ? '/' : '';
+?>
