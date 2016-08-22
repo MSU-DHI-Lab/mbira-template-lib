@@ -1,7 +1,7 @@
 <?php
 
 /**
- *  Created by PhpStorm.
+ * Created by PhpStorm.
  * User: ZhichengXu
  * Date: 11/5/15
  * Time: 10:08 PM
@@ -42,21 +42,24 @@ SQL;
      * @returns Random location id if successful, null otherwise.
      */
     public function get_random() {
-        $sql =<<<SQL
+        /*$sql =<<<SQL
 SELECT id from $this->tableName
-SQL;
+SQL;*/
+
+        $sql = 'SELECT id from '.$this->tableName.' where project_id=?';
 
         $pdo = $this->pdo();
         $statement = $pdo->prepare($sql);
-        $statement->execute();
+        $statement->execute(array(PROJID));
         if($statement->rowCount() === 0) {
             return null;
         }
 
         $locations = $statement->fetchAll(PDO::FETCH_COLUMN);
 
-        return $locations[array_rand($locations,1)] ;
+        return $locations[array_rand($locations,1)];   
     }
+
 
     /**
      * Get an arrya of media by location id
@@ -65,7 +68,7 @@ SQL;
      */
     public function getMedia($id) {
         $sql =<<<SQL
-SELECT * from mbira_loc_media
+SELECT file_path from mbira_loc_media
 where location_id=?
 SQL;
 
@@ -76,6 +79,6 @@ SQL;
             return null;
         }
 
-        return $statement->fetchAll();
+        return $statement->fetchAll(PDO::FETCH_COLUMN);
     }
 }

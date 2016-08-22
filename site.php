@@ -11,7 +11,13 @@
  * @brief A file loaded for all pages on the site.
  */
 //Start the session system
-session_start();
+//session_start();
+
+if(!isset($_SESSION)) 
+{ 
+    session_start(); 
+} 
+
 
 require __DIR__ . "/autoload.php";
 require_once "config.php";
@@ -22,7 +28,7 @@ if(is_callable($localize)) {
     $localize($site);
 }
 
-$site->setProjectId($projectID);
+$site->setProjectId(PROJID);
 
 $projects = new Projects($site);            ///< Creates project table
 $exhibits = new Exhibits($site);            ///< Creates exhibit table

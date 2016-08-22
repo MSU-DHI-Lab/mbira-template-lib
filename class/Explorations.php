@@ -21,14 +21,16 @@ class Explorations extends Table{
      * @returns Exploration object if successful, null otherwise.
      */
     public function get($id) {
-        $sql =<<<SQL
+/*        $sql =<<<SQL
 SELECT * from $this->tableName
 where id=?
 SQL;
+        */
+        $sql = 'SELECT * from '.$this->tableName.' where id=? and project_id=?';
 
         $pdo = $this->pdo();
         $statement = $pdo->prepare($sql);
-        $statement->execute(array($id));
+        $statement->execute(array($id,PROJID));
         if($statement->rowCount() === 0) {
             return null;
         }
@@ -42,12 +44,15 @@ SQL;
      */
     public function getCount()
     {
-        $sql =<<<SQL
+/*        $sql =<<<SQL
 SELECT * from $this->tableName
-SQL;
+SQL;*/
+        
+        $sql = 'SELECT * from '.$this->tableName.' where project_id=?';
+        
         $pdo = $this->pdo();
         $statement = $pdo->prepare($sql);
-        $statement->execute();
+        $statement->execute(array(PROJID));
         $this->count = $statement->rowCount();
 
         return $this->count;
@@ -57,12 +62,15 @@ SQL;
      * @return an array contains the titles of each exploration
      */
     public function getTitles() {
-        $sql =<<<SQL
+/*        $sql =<<<SQL
 SELECT name from $this->tableName
-SQL;
+SQL;*/
+        
+        $sql = 'SELECT name from '.$this->tableName.' where project_id=?';
+        
         $pdo = $this->pdo();
         $statement = $pdo->prepare($sql);
-        $statement->execute();
+        $statement->execute(array(PROJID));
 
         return $statement->fetchAll(PDO::FETCH_COLUMN);
     }
@@ -72,12 +80,15 @@ SQL;
      * @return an array contains the  image paths of each exploration
      */
     public function getPaths() {
-        $sql =<<<SQL
+/*        $sql =<<<SQL
 SELECT thumb_path from $this->tableName
-SQL;
+SQL;*/
+        
+        $sql = 'SELECT thumb_path from '.$this->tableName.' where project_id=?';
+        
         $pdo = $this->pdo();
         $statement = $pdo->prepare($sql);
-        $statement->execute();
+        $statement->execute(array(PROJID));
 
         return $statement->fetchAll(PDO::FETCH_COLUMN);
     }
@@ -87,12 +98,15 @@ SQL;
      * @return an array contains the id of each exploration
      */
     public function getIDs() {
-        $sql =<<<SQL
+/*        $sql =<<<SQL
 SELECT id from $this->tableName
-SQL;
+SQL;*/
+        
+        $sql ='SELECT id from '.$this->tableName.' where project_id=?';
+        
         $pdo = $this->pdo();
         $statement = $pdo->prepare($sql);
-        $statement->execute();
+        $statement->execute(array(PROJID));
 
         return $statement->fetchAll(PDO::FETCH_COLUMN);
     }

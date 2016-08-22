@@ -33,7 +33,7 @@ class Site {
     }
 
     /**
-     * @param mixed $projectId
+     * @param mixed PROJID
      */
     public function setProjectId($projectId)
     {
