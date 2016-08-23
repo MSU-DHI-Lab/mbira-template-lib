@@ -5,7 +5,7 @@ $dbname = "";                // enter the database name you want to connect with
 $dbpass = "";               // enter the password
 $dbhost = "";   // enter the host information
 
-$projectID = ;             // enter project id here (found on Device Settings page)
+$projectID = 1;             // enter project id here (found on Device Settings page)
 
 $source = "";   // Image source
 
