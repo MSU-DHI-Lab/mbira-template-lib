@@ -6,7 +6,7 @@
  * Time: 3:32 PM
  */
 
-require_once __DIR__ . "/config.php";
+require_once __DIR__ . "/config.php.dist";
 /**
  * Function to localize our site
  * @param $site The Site object
