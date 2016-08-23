@@ -20,7 +20,7 @@ if(!isset($_SESSION))
 
 
 require __DIR__ . "/autoload.php";
-require_once "config.php.dist";
+require_once "config.php";
 
 $site = new Site();
 $localize = require 'localize.php';
