@@ -65,7 +65,7 @@ SQL;
      */
     public function getMedia($id) {
         $sql =<<<SQL
-SELECT * from mbira_area_media
+SELECT file_path from mbira_area_media
 where area_id=?
 SQL;
 
@@ -76,7 +76,7 @@ SQL;
             return null;
         }
 
-        return $statement->fetchAll();
+        return $statement->fetchAll(PDO::FETCH_COLUMN);
 
     }
 
