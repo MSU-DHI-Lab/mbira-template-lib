@@ -54,12 +54,28 @@ class Users extends Table {
 
         // Add a record to the newuser table
         $sql = <<<SQL
-INSERT INTO $this->tableName(username, email, password, salt, firstName, lastName, validator, projectId)
-values(?, ?, ?, ?, ?, ?, ?, ?)
+INSERT INTO $this->tableName (username, email, password, salt, firstName, lastName, validator)
+values(?, ?, ?, ?, ?, ?, ?)
 SQL;
 
+        $this->pdo()->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+        try {
+            $statement = $this->pdo()->prepare($sql);
+            $statement->execute(array($username, $email, $pass, $salt, $firstname, $lastname, $validator));
+        } catch (PDOException $e){
+            echo $e->getMessage();
+        }
+
+        $lastId = $this->pdo()->lastInsertId();
+
+        $sql = <<<SQL
+INSERT INTO mbira_projects_has_mbira_users (mbira_users_id, mbira_projects_id)
+values(?, ?)
+SQL;
+
+
         $statement = $this->pdo()->prepare($sql);
-        $statement->execute(array($username, $email, $pass, $salt, $firstname, $lastname, $validator, $this->site->getProjectId()));
+        $statement->execute(array($lastId, $this->site->getProjectId()));
 
         // Send email with the validator in it
         $link = $this->site->getRoot() . '/signup-validate.php?v=' . $validator;

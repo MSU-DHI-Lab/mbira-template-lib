@@ -38,7 +38,7 @@ $areas = new Areas($site);                  ///< Creates area table
 $users = new Users($site);                  ///< Creates user table
 
 echo $base;
-$site->setRoot('http://dev2.matrix.msu.edu/mbirawebtemplate');
+$site->setRoot(SITEROOT);
 //$site->setRoot('http://'.$_SERVER['HTTP_HOST'].'/~zhicheng.xu/mbira_templates/web/');
 $user = null;
 if(isset($_SESSION['user'])) {
