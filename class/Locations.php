@@ -81,4 +81,60 @@ SQL;
 
         return $statement->fetchAll();
     }
+    
+    /*
+    * Gets the dig deeper toggle setting
+    * @param $id The location ID
+    * @returns true/false
+    */
+    public function getDigDeeperToggle($id) {
+        $sql = 'SELECT toggle_dig_deeper from mbira_locations where id=?';
+
+        $pdo = $this->pdo();
+        $statement = $pdo->prepare($sql);
+        $statement->execute(array($id));
+        if($statement->rowCount() === 0) {
+            return null;
+        }
+
+        return $statement->fetchAll();
+    }
+    
+    
+    /*
+    * Gets the media toggle setting
+    * @param $id The location ID
+    * @returns true/false
+    */
+    public function getMediaToggle($id) {
+        $sql = 'SELECT toggle_media from mbira_locations where id=?';
+
+        $pdo = $this->pdo();
+        $statement = $pdo->prepare($sql);
+        $statement->execute(array($id));
+        if($statement->rowCount() === 0) {
+            return null;
+        }
+
+        return $statement->fetchAll();
+    }
+    
+    /*
+    * Gets the comments toggle setting
+    * @param $id The location ID
+    * @returns true/false
+    */
+    public function getCommentsToggle($id) {
+        $sql = 'SELECT toggle_comments from mbira_locations where id=?';
+
+        $pdo = $this->pdo();
+        $statement = $pdo->prepare($sql);
+        $statement->execute(array($id));
+        if($statement->rowCount() === 0) {
+            return null;
+        }
+
+        return $statement->fetchAll();
+    }
+    
 }
