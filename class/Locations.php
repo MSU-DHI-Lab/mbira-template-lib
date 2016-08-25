@@ -88,7 +88,7 @@ SQL;
     * @returns true/false
     */
     public function getDigDeeperToggle($id) {
-        $sql = 'SELECT toggle_dig_deeper from mbira_locations where location_id=?';
+        $sql = 'SELECT toggle_dig_deeper from mbira_locations where id=?';
 
         $pdo = $this->pdo();
         $statement = $pdo->prepare($sql);
@@ -107,7 +107,7 @@ SQL;
     * @returns true/false
     */
     public function getMediaToggle($id) {
-        $sql = 'SELECT toggle_media from mbira_locations where location_id=?';
+        $sql = 'SELECT toggle_media from mbira_locations where id=?';
 
         $pdo = $this->pdo();
         $statement = $pdo->prepare($sql);
@@ -125,7 +125,7 @@ SQL;
     * @returns true/false
     */
     public function getCommentsToggle($id) {
-        $sql = 'SELECT toggle_comments from mbira_locations where location_id=?';
+        $sql = 'SELECT toggle_comments from mbira_locations where id=?';
 
         $pdo = $this->pdo();
         $statement = $pdo->prepare($sql);
