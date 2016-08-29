@@ -87,6 +87,20 @@ class Exploration {
         return $this->headerPath;
     }
     
+    /**
+    * @return mixed
+    */
+    public function getComments()
+    {
+        $sql = 'SELECT * from '.$this->tableName.' where exploration_id=?';
+        
+        $pdo = $this->pdo();
+        $statement = $pdo->prepare($sql);
+        $statement->execute(array($this->id));
+
+        return $statement->fetchAll(PDO::FETCH_COLUMN);
+    }
+    
     
 
     private $project_id;    ///< The project id that this exploration is in

@@ -13,14 +13,13 @@
 //Start the session system
 //session_start();
 
+require __DIR__ . "/autoload.php";
+require_once "config.php";
+
 if(!isset($_SESSION)) 
 { 
     session_start(); 
 } 
-
-
-require __DIR__ . "/autoload.php";
-require_once "config.php";
 
 $site = new Site();
 $localize = require 'localize.php';
