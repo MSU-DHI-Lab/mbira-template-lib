@@ -280,15 +280,17 @@ SQL;
      * @param $user a user id or email
      * @param $pass the new password
      */
-    public function changePassword($pass) {
+    public function changePassword($pass, $user) {
         $sql =<<<SQL
 UPDATE $this->tableName
 SET password = ?, salt = ?
 where username=? or email=?
 SQL;
 
+        $salt = self::random_salt();
+        $pass = hash("sha256", $pass . $salt);
         $pdo = $this->pdo();
         $statement = $pdo->prepare($sql);
-        $statement->execute(array($pass['password'],$pass['salt'],$pass['id'],$pass['id']));
+        $statement->execute(array($pass,$salt,$user,$user));
     }
 }
