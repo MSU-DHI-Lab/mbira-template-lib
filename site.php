@@ -35,6 +35,7 @@ $explorations = new Explorations($site);    ///< Creates exploration table
 $locations = new Locations($site);          ///< Creates location table
 $areas = new Areas($site);                  ///< Creates area table
 $users = new Users($site);                  ///< Creates user table
+$search = new Search($site);                  ///< Creates user table
 
 echo $base;
 $site->setRoot(SITEROOT);
