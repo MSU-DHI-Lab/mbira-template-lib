@@ -52,7 +52,7 @@ class Users extends Table {
         $salt = self::random_salt();
         $pass = hash("sha256", $password1 . $salt);
 
-        // Add a record to the newuser table
+/*        // Add a record to the newuser table
         $sql = <<<SQL
 INSERT INTO $this->tableName (username, email, password, salt, firstName, lastName, validator)
 values(?, ?, ?, ?, ?, ?, ?)
@@ -64,8 +64,8 @@ SQL;
             $statement->execute(array($username, $email, $pass, $salt, $firstname, $lastname, $validator));
         } catch (PDOException $e){
             echo $e->getMessage();
-        }
-
+        }*/
+        
         $lastId = $this->pdo()->lastInsertId();
 
         $sql = <<<SQL
@@ -96,7 +96,7 @@ MSG;
         $headers = "MIME-Version: 1.0\r\nContent-type: text/html; charset=iso=8859-1\r\nFrom: $from\r\n";
         $mailer->mail($email, $subject, $message, $headers);
     }
-
+    
     /**
      * @brief Generate a random validator string of characters
      * @param $len Length to generate, default is 32
@@ -230,7 +230,7 @@ SQL;
      * userid, name, email, password, salt, and joined.
      */
     public function add($user) {
-        $sql =<<<SQL
+/*        $sql =<<<SQL
 INSERT INTO $this->tableName (id,username,email,password,salt,firstName,lastName,confirmed,validator)
 VALUES (?,?,?,?,?,?,?)
 SQL;
@@ -244,7 +244,23 @@ SQL;
                             $user['firstName'],
                             $user['lastName'],
                             $user['confirmed'],
+                            $user['validator']));*/
+            $sql =<<<SQL
+INSERT INTO $this->tableName (id,username,email,password,salt,firstName,lastName,confirmed,validator)
+VALUES (?,?,?,?,?,?,?,?)
+SQL;
+        $pdo = $this->pdo();
+        $statement = $pdo->prepare($sql);
+        $statement->execute(array($user['id'],
+                            $user['username'],
+                            $user['email'],
+                            $user['password'],
+                            $user['salt'],
+                            $user['firstName'],
+                            $user['lastName'],
+                            $user['confirmed'],
                             $user['validator']));
+    
     }
 
     /**
@@ -292,5 +308,53 @@ SQL;
         $pdo = $this->pdo();
         $statement = $pdo->prepare($sql);
         $statement->execute(array($pass,$salt,$user,$user));
+    }
+    
+    public function sendNewPwdEmail($usermail){
+/*        $sql = 'SELECT * from $this->tableName where username=?';
+        $pdo = $this->pdo();
+        $statement = $pdo->prepare($sql);
+        $statement->execute(array($usermail));
+        if($statement->rowCount() === 0) {
+            return null;
+        }
+        $user = $statement->fetch(PDO::FETCH_ASSOC);
+        */
+        
+        // generate token and send in email
+        
+        $mailer = new Email();
+        
+        $valid = 'abcdefghijklmnopqrstuvwxyz';
+        $valid .= 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $valid .= '0123456789';
+        $tmp_validator = '';
+        for ($i = 0; $i < 10; $i++){
+            $tmp_validator  .= $valid[( rand() % 62 )];
+        }
+        
+        // Send email with the validator in it
+        $link = $this->site->getRoot() . '/resetPassword.php?v=' . $password;
+        
+        $from = $this->site->getEmail();
+
+        $subject = "Confirm your email";
+        $message = <<<MSG
+<html>
+<p>Greetings, </p>
+
+<p>Welcome to Mbira. In order to complete your registration,
+please verify your email address by clicking the following link:</p>
+
+<p><a href="$link">$link</a></p>
+</html>
+MSG;
+        $headers = "MIME-Version: 1.0\r\nContent-type: text/html; charset=iso=8859-1\r\nFrom: $from\r\n";
+        
+        $mailer->mail($usermail, $subject, $message, $headers);
+
+        // write the temp validator to a DB
+                
+        
     }
 }
