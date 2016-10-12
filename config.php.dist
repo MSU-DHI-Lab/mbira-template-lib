@@ -24,4 +24,3 @@ $base = str_replace(
     realpath(dirname(__FILE__)));
 
 $base = ($base == '') ? '/' : '';
-?>

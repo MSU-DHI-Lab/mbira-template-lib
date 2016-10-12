@@ -1,15 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ZhichengXu
- * Date: 10/6/15
- * Time: 3:31 PM
- */
 
-/**
- * @file
- * @brief A file loaded for all pages on the site.
- */
 //Start the session system
 //session_start();
 
