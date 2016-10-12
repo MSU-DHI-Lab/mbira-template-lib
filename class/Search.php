@@ -74,7 +74,7 @@ SQL;
 
 $sql =<<<SQL
 SELECT * FROM mbira_exhibits WHERE (`name` LIKE :query) OR (`description` LIKE :query)
-OR (`short_description` LIKE :query) OR (`dig_deeper` LIKE :query) Order By id DESC LIMIT 10
+Order By id DESC LIMIT 10
 SQL;
 
         $pdo = $this->pdo();
@@ -88,8 +88,8 @@ SQL;
 // SELECT * FROM mbira_explorations WHERE MATCH(name, description, short_description, dig_deeper) AGAINST(?) Order By id DESC LIMIT 10
 
 $sql =<<<SQL
-SELECT * FROM mbira_explorations WHERE (`name` LIKE :query) OR (`description` LIKE :query)
-OR (`short_description` LIKE :query) OR (`dig_deeper` LIKE :query) Order By id DESC LIMIT 10
+SELECT * FROM mbira_explorations WHERE (`name` LIKE :query) OR (`description` LIKE :query) 
+Order By id DESC LIMIT 10
 SQL;
 
         $pdo = $this->pdo();
