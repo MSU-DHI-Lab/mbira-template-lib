@@ -44,7 +44,7 @@ class Users extends Table {
         if($password1 !== $password2) {
             return "Passwords are not equal";
         }
-        
+
         // Create a validator key
         $validator = $this->createValidator();
 
@@ -52,20 +52,20 @@ class Users extends Table {
         $salt = self::random_salt();
         $pass = hash("sha256", $password1 . $salt);
 
-/*        // Add a record to the newuser table
+       // Add a record to the newuser table
         $sql = <<<SQL
 INSERT INTO $this->tableName (username, email, password, salt, firstName, lastName, validator)
 values(?, ?, ?, ?, ?, ?, ?)
 SQL;
 
-        $this->pdo()->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+        $this->pdo()->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         try {
             $statement = $this->pdo()->prepare($sql);
             $statement->execute(array($username, $email, $pass, $salt, $firstname, $lastname, $validator));
         } catch (PDOException $e){
             echo $e->getMessage();
-        }*/
-        
+        }
+
         $lastId = $this->pdo()->lastInsertId();
 
         $sql = <<<SQL
@@ -96,7 +96,7 @@ MSG;
         $headers = "MIME-Version: 1.0\r\nContent-type: text/html; charset=iso=8859-1\r\nFrom: $from\r\n";
         $mailer->mail($email, $subject, $message, $headers);
     }
-    
+
     /**
      * @brief Generate a random validator string of characters
      * @param $len Length to generate, default is 32
@@ -170,9 +170,9 @@ SQL;
 
         $row = $statement->fetch(PDO::FETCH_ASSOC);
 
-        // if($row['confirmed'] == 0) {
-        //     return 'Validate your email before trying to log in.';
-        // }
+        if($row['confirm'] == 0) {
+            return 'Validate your email before trying to log in.';
+        }
         // Get the encrypted password and salt from the record
         $hash = $row['password'];
         $salt = $row['salt'];
@@ -230,23 +230,8 @@ SQL;
      * userid, name, email, password, salt, and joined.
      */
     public function add($user) {
-/*        $sql =<<<SQL
-INSERT INTO $this->tableName (id,username,email,password,salt,firstName,lastName,confirmed,validator)
-VALUES (?,?,?,?,?,?,?)
-SQL;
-        $pdo = $this->pdo();
-        $statement = $pdo->prepare($sql);
-        $statement->execute(array($user['id'],
-                            $user['username'],
-                            $user['email'],
-                            $user['password'],
-                            $user['salt'],
-                            $user['firstName'],
-                            $user['lastName'],
-                            $user['confirmed'],
-                            $user['validator']));*/
             $sql =<<<SQL
-INSERT INTO $this->tableName (id,username,email,password,salt,firstName,lastName,confirmed,validator)
+INSERT INTO $this->tableName (id,username,email,password,salt,firstName,lastName,confirm,validator)
 VALUES (?,?,?,?,?,?,?,?)
 SQL;
         $pdo = $this->pdo();
@@ -258,9 +243,9 @@ SQL;
                             $user['salt'],
                             $user['firstName'],
                             $user['lastName'],
-                            $user['confirmed'],
+                            $user['confirm'],
                             $user['validator']));
-    
+
     }
 
     /**
@@ -282,7 +267,7 @@ SQL;
         $user = $statement->fetch(PDO::FETCH_ASSOC);
 
         $sql =<<<SQL
-UPDATE $this->tableName SET confirmed = 1 
+UPDATE $this->tableName SET confirm = 1
 where validator=?
 SQL;
         $pdo = $this->pdo();
@@ -291,12 +276,12 @@ SQL;
 
         return $user;
     }
-    
+
     /**
      * @param $user a user id or email
      * @param $pass the new password
      */
-    public function changePassword($pass, $user) {
+    public function changePassword($user, $pass) {
         $sql =<<<SQL
 UPDATE $this->tableName
 SET password = ?, salt = ?
@@ -309,52 +294,55 @@ SQL;
         $statement = $pdo->prepare($sql);
         $statement->execute(array($pass,$salt,$user,$user));
     }
-    
+
     public function sendNewPwdEmail($usermail){
-/*        $sql = 'SELECT * from $this->tableName where username=?';
-        $pdo = $this->pdo();
-        $statement = $pdo->prepare($sql);
-        $statement->execute(array($usermail));
-        if($statement->rowCount() === 0) {
-            return null;
-        }
-        $user = $statement->fetch(PDO::FETCH_ASSOC);
-        */
-        
-        // generate token and send in email
-        
-        $mailer = new Email();
-        
-        $valid = 'abcdefghijklmnopqrstuvwxyz';
-        $valid .= 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $valid .= '0123456789';
-        $tmp_validator = '';
-        for ($i = 0; $i < 10; $i++){
-            $tmp_validator  .= $valid[( rand() % 62 )];
-        }
-        
-        // Send email with the validator in it
-        $link = $this->site->getRoot() . '/resetPassword.php?v=' . $password;
-        
-        $from = $this->site->getEmail();
+      $sql =<<<SQL
+SELECT * from $this->tableName
+where email=?
+SQL;
+      $pdo = $this->pdo();
+      $statement = $pdo->prepare($sql);
+      $statement->execute(array($usermail));
+      if($statement->rowCount() === 0) {
+          return "Email is incorrect";
+      }
+      $user = $statement->fetch(PDO::FETCH_ASSOC);
 
-        $subject = "Confirm your email";
-        $message = <<<MSG
+      // generate token and send in email
+
+      $mailer = new Email();
+
+      $validator = $this->createValidator();
+
+      // Send email with the validator in it
+      $link = $this->site->getRoot() . '/resetpassword.php?v=' . $validator;
+
+      $from = $this->site->getEmail();
+
+      $subject = "Password Reset";
+      $name = $user['firstName'];
+      $message = <<<MSG
 <html>
-<p>Greetings, </p>
+<p>Greetings $name,</p>
 
-<p>Welcome to Mbira. In order to complete your registration,
-please verify your email address by clicking the following link:</p>
+<p>In order to change your password,
+please navigate to the following link:</p>
 
 <p><a href="$link">$link</a></p>
 </html>
 MSG;
-        $headers = "MIME-Version: 1.0\r\nContent-type: text/html; charset=iso=8859-1\r\nFrom: $from\r\n";
-        
-        $mailer->mail($usermail, $subject, $message, $headers);
+      $headers = "MIME-Version: 1.0\r\nContent-type: text/html; charset=iso=8859-1\r\nFrom: $from\r\n";
 
-        // write the temp validator to a DB
-                
-        
+      $mailer->mail($usermail, $subject, $message, $headers);
+
+      // write the temp validator to a DB
+      $sql =<<<SQL
+UPDATE $this->tableName SET validator = ?
+where email=?
+SQL;
+      $pdo = $this->pdo();
+      $statement = $pdo->prepare($sql);
+      $statement->execute(array($validator, $usermail));
+
     }
 }

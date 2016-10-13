@@ -6,10 +6,10 @@
 require __DIR__ . "/autoload.php";
 require_once "config.php";
 
-if(!isset($_SESSION)) 
-{ 
-    session_start(); 
-} 
+if(!isset($_SESSION))
+{
+    session_start();
+}
 
 $site = new Site();
 $localize = require 'localize.php';
@@ -18,6 +18,7 @@ if(is_callable($localize)) {
 }
 
 $site->setProjectId(PROJID);
+$site->setEmail(SITEEMAIL);
 
 $projects = new Projects($site);            ///< Creates project table
 $exhibits = new Exhibits($site);            ///< Creates exhibit table

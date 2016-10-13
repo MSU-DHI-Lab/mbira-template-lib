@@ -7,12 +7,14 @@ $dbhost = "";   // enter the host information
 
 $projectID = ;             // enter project id here (found on Device Settings page)
 $siteRoot = ;             // enter project url here
+$siteEmail = ;             // enter project email here
 
 $source = "";   // Image source
 
 
 define("PROJID", $projectID);
 define("SITEROOT",$siteRoot);
+define("SITEEMAIL",$siteEmail);
 define("DBUSER",$dbuser);
 define("DBHOST",$dbhost);
 define("DBPASS", $dbpass);

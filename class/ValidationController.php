@@ -29,20 +29,28 @@ class ValidationController {
             return "Invalid validator";
         }
 
-        return "Success";
+        return $user;
     }
 
-    public function validatePassword($validator) {
-        $users = new Users($this->site);
-        $np = new NewPassword($this->site);
+    public function validatePassword($validator, $password1, $password2) {
+      // Ensure the passwords are valid and equal
+      if(strlen($password1) < 8) {
+          return "Passwords must be at least 8 characters long";
+      }
 
-        $pass = $np->removeNewpassword($validator);
-        if($pass === null) {
-            return "Invalid validator";
-        }
+      if($password1 !== $password2) {
+          return "Passwords are not equal";
+      }
 
-        $users->changePassword($pass);
-        return null;
+      $users = new Users($this->site);
+      $user = $users->confirmUser($validator);
+      if($user === null) {
+          return "Invalid validator";
+      }
+
+
+      $users->changePassword($user['email'], $password1);
+      return null;
     }
 
     private $site;
