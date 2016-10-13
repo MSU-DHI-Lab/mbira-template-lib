@@ -47,9 +47,9 @@ SQL;
 /*        $sql =<<<SQL
 SELECT * from $this->tableName
 SQL;*/
-        
+
         $sql = 'SELECT * from '.$this->tableName.' where project_id=?';
-        
+
         $pdo = $this->pdo();
         $statement = $pdo->prepare($sql);
         $statement->execute(array(PROJID));
@@ -65,9 +65,9 @@ SQL;*/
 /*        $sql =<<<SQL
 SELECT name from $this->tableName
 SQL;*/
-        
+
         $sql = 'SELECT name from '.$this->tableName.' where project_id=?';
-        
+
         $pdo = $this->pdo();
         $statement = $pdo->prepare($sql);
         $statement->execute(array(PROJID));
@@ -83,14 +83,32 @@ SQL;*/
 /*        $sql =<<<SQL
 SELECT thumb_path from $this->tableName
 SQL;*/
-        
+
         $sql = 'SELECT thumb_path from '.$this->tableName.' where project_id=?';
-        
+
         $pdo = $this->pdo();
         $statement = $pdo->prepare($sql);
         $statement->execute(array(PROJID));
 
         return $statement->fetchAll(PDO::FETCH_COLUMN);
+    }
+
+    /*
+    * Gets the comments toggle setting
+    * @param $id The location ID
+    * @returns true/false
+    */
+    public function getCommentsToggle($id) {
+        $sql = 'SELECT toggle_comments from mbira_explorations where id=?';
+
+        $pdo = $this->pdo();
+        $statement = $pdo->prepare($sql);
+        $statement->execute(array($id));
+        if($statement->rowCount() === 0) {
+            return null;
+        }
+
+        return $statement->fetchAll();
     }
 
 
@@ -101,9 +119,9 @@ SQL;*/
 /*        $sql =<<<SQL
 SELECT id from $this->tableName
 SQL;*/
-        
+
         $sql ='SELECT id from '.$this->tableName.' where project_id=?';
-        
+
         $pdo = $this->pdo();
         $statement = $pdo->prepare($sql);
         $statement->execute(array(PROJID));
