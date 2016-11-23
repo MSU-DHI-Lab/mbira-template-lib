@@ -57,6 +57,30 @@ SQL;
         return new Area($statement->fetch(PDO::FETCH_ASSOC));
     }
 
+    /**
+     * Get all areas
+     * @returns Area objects if successful, null otherwise.
+     */
+    public function getAll() {
+        $sql =<<<SQL
+SELECT * from $this->tableName
+SQL;
+
+        $pdo = $this->pdo();
+        $statement = $pdo->prepare($sql);
+        $statement->execute();
+        if($statement->rowCount() === 0) {
+            return null;
+        }
+
+        // $loc_array = [];
+        // while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+        //     array_push($loc_array, new Location($row));
+        // }
+
+        return $statement->fetchAll();
+    }  
+
 
     /**
      * Get an arrya of media by location id

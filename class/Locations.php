@@ -38,6 +38,30 @@ SQL;
     }
 
     /**
+     * Get all locations
+     * @returns Location objects if successful, null otherwise.
+     */
+    public function getAll() {
+        $sql =<<<SQL
+SELECT * from $this->tableName
+SQL;
+
+        $pdo = $this->pdo();
+        $statement = $pdo->prepare($sql);
+        $statement->execute();
+        if($statement->rowCount() === 0) {
+            return null;
+        }
+
+        // $loc_array = [];
+        // while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+        //     array_push($loc_array, new Location($row));
+        // }
+
+        return $statement->fetchAll();
+    }    
+
+    /**
      * Get a random location id
      * @returns Random location id if successful, null otherwise.
      */
