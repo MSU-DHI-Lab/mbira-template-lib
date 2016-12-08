@@ -1,5 +1,6 @@
 <?php
 
+/* ALL FIELDS ARE REQUIRED */
 $dbuser = "";                // enter the user name to connect to the database
 $dbname = "";                // enter the database name you want to connect with
 $dbpass = "";               // enter the password
@@ -19,6 +20,30 @@ define("DBUSER",$dbuser);
 define("DBHOST",$dbhost);
 define("DBPASS", $dbpass);
 define("DBNAME", $dbname);
+
+/* You may use your own map provider  by filling out the parameters below.  
+   You may find instructions on filling this out here: 
+      http://leafletjs.com/reference.html#url-template
+*/
+$mapTileURL = "" ;
+$mapTileParameters = <<<MAPTILE
+{
+
+}
+MAPTILE;
+
+/*
+ If you don't have a preferred mapTile provider, uncomment the lines below
+*/
+
+// $mapTileURL = "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"; 
+// $mapTileParameters = <<<MAPTILE
+// {
+//   maxZoom: 18,
+//   attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+// }
+// MAPTILE;
+
 
 $base = str_replace(
     $_SERVER['DOCUMENT_ROOT'],
